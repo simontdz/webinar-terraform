@@ -23,6 +23,8 @@ resource "aws_instance" "nginx-server" {
 
 }
 
+######SSH#######
+# ssh-keygen -t rsa -b 2048 -f "ngnix-server.key"
 
 resource "aws_key_pair" "nginx-server-ssh" {
   key_name   = "ngnix-server-ssh"
