@@ -1,4 +1,4 @@
-# Excluir proveedores de Terraform
+# Terraform
 .terraform/
 *.tfstate
 *.tfstate.backup
