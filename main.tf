@@ -1,3 +1,40 @@
+####### variables ##########
+
+  variable "ami_id" {
+    description = "ID de la AMI para la instancia EC2"
+    default = "ami-0440d3b780d96b29d"
+  }
+
+  variable "instance_type" {
+    description = "Tipo de instancia EC2"
+    default = "t3.micro"
+  }
+
+  variable "server_name" {
+    description = "Nombre del servidor web"
+    default = "ngnix-server"
+  }
+
+  variable "environment" {
+    description = "Ambiente de la aplicación"
+    default = "test"
+  }
+
+  variable "owner" {
+    description = "Creador del proyecto"
+    default = "simontdz123@gmail.com"
+  }
+
+  variable "team" {
+    description = "Equipo"
+    default = "DevOps"
+  }
+
+  variable "project" {
+    description = "Nombre de proyecto"
+    default = "Webinar"
+  }
+
 ############ provider ########
 provider "aws" {
   region = "us-east-1"
@@ -5,8 +42,8 @@ provider "aws" {
 
 ############ resource ########
 resource "aws_instance" "nginx-server" {
-  ami           = "ami-0440d3b780d96b29d"
-  instance_type = "t3.micro"
+  ami           = var.ami_id
+  instance_type = var.instance_type
 
   user_data = <<-EOF
                 #!/bin/bash
@@ -22,11 +59,11 @@ resource "aws_instance" "nginx-server" {
   ]
 
   tags = {
-    Name        = "ngnix-server"
-    Environment = "test"
-    Owner       = "simontdz123@gmail.com"
-    Team        = "Devops"
-    Project     = "Webinar"
+    Name        = var.server_name
+    Environment = var.environment
+    Owner       = var.owner
+    Team        = var.team
+    Project     = var.project
   }
 
 }
@@ -35,22 +72,22 @@ resource "aws_instance" "nginx-server" {
 # ssh-keygen -t rsa -b 2048 -f "ngnix-server.key"
 
 resource "aws_key_pair" "nginx-server-ssh" {
-  key_name   = "ngnix-server-ssh"
-  public_key = file("ngnix-server.key.pub")
+  key_name   = "${var.server_name}-ssh"
+  public_key = file("${var.server_name}.key.pub")
 
     tags = {
-    Name        = "ngnix-server-ssh"
-    Environment = "test"
-    Owner       = "simontdz123@gmail.com"
-    Team        = "Devops"
-    Project     = "Webinar"
+    Name        = "${var.server_name}-ssh"
+    Environment = var.environment
+    Owner       = var.owner
+    Team        = var.team
+    Project     = var.project
   }
 
 }
 
 ######SG#######
 resource "aws_security_group" "ngnix-server-sg" {
-  name        = "ngnix-server-sg"
+  name        = "${var.server_name}-sg"
   description = "Security group allowing SSH and HTTP access"
 
   ingress {
@@ -74,11 +111,11 @@ resource "aws_security_group" "ngnix-server-sg" {
   }
 
     tags = {
-    Name        = "ngnix-server-sg"
-    Environment = "test"
-    Owner       = "simontdz123@gmail.com"
-    Team        = "Devops"
-    Project     = "Webinar"
+    Name        = "${var.server_name}-sg"
+    Environment = var.environment
+    Owner       = var.owner
+    Team        = var.team
+    Project     = var.project
   }
 }
 
