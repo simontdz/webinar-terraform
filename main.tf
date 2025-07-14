@@ -21,6 +21,14 @@ resource "aws_instance" "nginx-server" {
     aws_security_group.ngnix-server-sg.id
   ]
 
+  tags = {
+    Name        = "ngnix-server"
+    Environment = "test"
+    Owner       = "simontdz123@gmail.com"
+    Team        = "Devops"
+    Project     = "Webinar"
+  }
+
 }
 
 ######SSH#######
@@ -29,6 +37,15 @@ resource "aws_instance" "nginx-server" {
 resource "aws_key_pair" "nginx-server-ssh" {
   key_name   = "ngnix-server-ssh"
   public_key = file("ngnix-server.key.pub")
+
+    tags = {
+    Name        = "ngnix-server-ssh"
+    Environment = "test"
+    Owner       = "simontdz123@gmail.com"
+    Team        = "Devops"
+    Project     = "Webinar"
+  }
+
 }
 
 ######SG#######
@@ -56,6 +73,22 @@ resource "aws_security_group" "ngnix-server-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+    tags = {
+    Name        = "ngnix-server-sg"
+    Environment = "test"
+    Owner       = "simontdz123@gmail.com"
+    Team        = "Devops"
+    Project     = "Webinar"
+  }
+}
 
+####### output #######
+output "server_public_ip" {
+  description = "Direccion IP pública de la instancia EC2"
+  value = aws_instance.nginx-server.public_ip
+}
 
+output "server_public_dns" {
+  description = "DNS público de la instancia EC2"
+  value = aws_instance.nginx-server.public_dns
 }
